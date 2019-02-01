@@ -1,5 +1,27 @@
 apply plugin: 'com.android.application'
+/**
+ * 在前面的文章中我们讲到，设置和读取Project的Property是使用Gradle的一个很重要的方面。比如，
+ * 很多Plugin都会向Project中加入额外的Property，在使用这些Plugin时，我们需要对这些Property进行赋值。
+ Gradle在默认情况下已经为Project定义了很多Property，其中比较常用的有：
+ project：Project本身
+ name：Project的名字
+ path：Project的绝对路径
+ description：Project的描述信息
+ buildDir：Project构建结果存放目录
+ version：Project的版本号
+ */
+version = 'this is the project version'
+description = 'this is the project description'
 
+/**
+ * 请注意，在打印description时，我们使用了project.description，而不是直接使用description。
+ * 原因在于，Project和Task都拥有description属性，而定义Task的闭包将delegate设置成了当前的Task，
+ * 故如果直接使用description，此时打印的是showProjectProperties的description，而不是Project的，所以我们需要显式地指明project
+ */
+task showProjectProperties << {
+    println version
+    println project.description
+}
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -26,3 +48,47 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:0.5'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
 }
+
+/**
+ * 自定义属性====方式1
+ *
+ * 在build.gradle文件中向Project添加额外的Property时，我们并不能直接定义，而是应该通过ext来定义
+ */
+ext.customProperty = 'alex'
+
+/**
+ * 在定义了Property后，使用这些Property时我们则不需要ext，而是可以直接访问：
+ */
+task testCustomProperty << {
+    println customProperty
+}
+
+/***
+ * 自定义属性====方式2 通过闭包的方式
+ */
+ext {
+    customProperty1 = "自定义属性========="
+}
+task testCustomProperty1 {
+    println customProperty1
+}
+
+/**
+ * 通过命令行参数定义Property  自定义属性====方式3
+ 　Gradle还提供了-P命令行参数来设置Property
+ property3未定义执行 task Could not get unknown property 'property3' for task ':app:showCommandLieProperties' of type org.gradle.api.DefaultTask.
+ 异常
+ gradle -P property3="this is property3" showCommandLieProperties 可以执行task
+
+ */
+
+task showCommandLieProperties << {
+    println property3
+}
+
+/**
+ *  自定义属性====方式4
+ * 通过环境变量设置Property
+ 　我们还可以通过设置环境变量的方式设置Project的Property。这种方式和（3）一样，需要我们遵循一些约定：在定义环境变量时，每一个Property都需要以“ORG_GRADLE_PROJECT_”为前缀：
+   export ORG_GRADLE_PROJECT_property3="this is yet another property3"
+ */
