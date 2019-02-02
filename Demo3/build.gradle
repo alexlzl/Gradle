@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+
+
+
+    defaultConfig {
+        applicationId "com.example.myapplication"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+android.compileSdkVersion = 26
+android.defaultConfig.minSdkVersion = 15
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    implementation project(':Demo3Lib')
+}
+
+/**
+ * 以上3个Task完成的功能均相同，即先设置Task的description属性，在将其输出到命令行。
+ * 但是，他们对description的设置方式是不同的。对于showDescription1，我们在定义一个Task的同时便设置description；
+ * 对于showDescription2，其本身便是Project的一个Property；而对于showDescription3，我们是在一个和它同名的方法中设置description。
+ 　事实上，对于每一个Task，Gradle都会在Project中创建一个同名的Property，所以我们可以将该Task当作Property来访问，showDescription2便是这种情况。
+ 另外，Gradle还会创建一个同名的方法，该方法接受一个闭包，我们可以使用该方法来配置Task，showDescription3便是这种情况。
+ */
+task showDescription1 << {
+    description = 'this is task showDescription'
+    println description
+}
+
+
+task showDescription2 << {
+    println description
+}
+showDescription2.description = 'this is task showDescription'
+
+
+task showDescription3 << {
+    println description
+}
+
+showDescription3 {
+    description = 'this is task showDescription'
+}

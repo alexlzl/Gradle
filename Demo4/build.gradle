@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+
+
+
+    defaultConfig {
+        applicationId "com.example.myapplication"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+}
+/**
+ * Groovy中的Bean和Java中的Bean有一个很大的不同，即Groovy为每一个字段都会自动生成getter和setter，
+ * 并且我们可以通过像访问字段本身一样调用getter和setter，比如
+ *
+ * 我们看到，GroovyBeanExample只定义了一个私有的name属性，并没有getter和setter。
+ * 但是在使用时，我们可以直接对name进行访问，无论时读还是写。
+ * 事实上，我们并不是在直接访问name属性，当我们执行"bean.name = 'this is name'"时，
+ * 我们实际调用的是"bean.setName('this is name')"，而在调用"println bean.name"时，
+ * 我们实际调用的是"println bean.getName()"。这里的原因在于，Groovy动态地为name创建了getter和setter，
+ * 采用像直接访问的方式的目的是为了增加代码的可读性，使它更加自然，而在内部，Groovy依然是在调用setter和getter方法。
+ * 这样，我们便可以理解上面对showDescription2的description设置原理
+ */
+class GroovyBeanExample {
+    private String name
+}
+
+def bean = new GroovyBeanExample()
+bean.name = 'this is name'
+println bean.name
+
+apply from: "custom.gradle"
